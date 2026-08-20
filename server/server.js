@@ -16,7 +16,7 @@ const app = express();
 app.use(cors()); // Mengizinkan request dari frontend React
 app.use(express.json());  // Mem-parsing body request berbentuk JSON
 app.use('/api/auth',  require('./routes/authRoutes'));
-
+app.use('/api/campaigns',  require('./routes/campaignRoutes'));
 // 5. Route Dasar (Testing)
 app.get('/', (req, res) => {
   res.json({ message: 'API Charity Platform berjalan dengan baik...' });
