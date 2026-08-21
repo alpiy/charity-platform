@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,  useNavigate } from "react-router-dom";
+import  axios from  'axios';
 
 const Login = ()  =>  {
   const [formData,  setFormData]  = useState({
@@ -8,6 +9,7 @@ const Login = ()  =>  {
   });
 
   const { email,  password  } = formData;
+  const navigate  = useNavigate();
 
   const onChange  = (e) =>  {
     setFormData((prevState) =>  ({
@@ -18,8 +20,22 @@ const Login = ()  =>  {
 
   const onSubmit  = async (e) =>  {
     e.preventDefault();
-    console.log('Data yang akan dikirim:',  formData);
-    //axios logic
+    try {
+      const response  = await axios.post('/api/auth/login', {
+        email,
+        password
+      });
+
+      console.log('Login Sukses:',  response.data);
+
+      localStorage.setItem('token', response.data.token);
+
+      navigate('/campaigns');
+    } catch (error) {
+      const errorMessage  = error.response?.data?.message ||  'Terjadi Kesalahan pada server';
+      console.error('Login Gagal:', errorMessage);
+      alert('Login Gagal: ' + errorMessage);
+    }
   };
 
   return  (
